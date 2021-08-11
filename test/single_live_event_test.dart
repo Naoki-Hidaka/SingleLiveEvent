@@ -18,6 +18,8 @@ void main() {
     event.value = event2;
     expect(lastValue.runtimeType, event2.runtimeType);
     expect((lastValue as ExampleEvent2).num, 1);
+
+    event.dispose();
   });
 }
 
