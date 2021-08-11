@@ -12,11 +12,15 @@ void main() {
 
     final event1 = ExampleEvent1();
     event.value = event1;
-    expect(lastValue.runtimeType, event1.runtimeType);
+    expect(lastValue, event1);
+
+    final event1_2 = ExampleEvent1();
+    event.value = event1_2;
+    expect(lastValue, event1_2);
 
     final event2 = ExampleEvent2(1);
     event.value = event2;
-    expect(lastValue.runtimeType, event2.runtimeType);
+    expect(lastValue, event2);
     expect((lastValue as ExampleEvent2).num, 1);
 
     event.dispose();
