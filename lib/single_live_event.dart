@@ -1,7 +1,38 @@
-library single_live_event;
+import 'package:flutter/cupertino.dart';
 
-/// A Calculator.
-class Calculator {
-  /// Returns [value] plus 1.
-  int addOne(int value) => value + 1;
+class SingleLiveEvent<T> extends ValueNotifier<T?> {
+  SingleLiveEvent() : super(null);
+
+  bool shouldNotify = false;
+  Function(T)? observer;
+
+  void observe(Function(T) observer) {
+    this.observer = observer;
+    super.addListener(considerNotify);
+  }
+
+  @override
+  void removeListener(VoidCallback listener) {
+    observer = null;
+    super.removeListener(listener);
+  }
+
+  @override
+  void dispose() {
+    observer = null;
+    super.dispose();
+  }
+
+  @override
+  set value(T? newValue) {
+    shouldNotify = true;
+    super.value = newValue;
+  }
+
+  void considerNotify() {
+    if (shouldNotify && value != null) {
+      shouldNotify = false;
+      observer?.call(value!);
+    }
+  }
 }
