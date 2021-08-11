@@ -3,36 +3,36 @@ import 'package:flutter/cupertino.dart';
 class SingleLiveEvent<T> extends ValueNotifier<T?> {
   SingleLiveEvent() : super(null);
 
-  bool shouldNotify = false;
-  Function(T)? observer;
+  bool _shouldNotify = false;
+  Function(T)? _observer;
 
   void observe(Function(T) observer) {
-    this.observer = observer;
+    this._observer = observer;
     super.addListener(considerNotify);
   }
 
   @override
   void removeListener(VoidCallback listener) {
-    observer = null;
+    _observer = null;
     super.removeListener(listener);
   }
 
   @override
   void dispose() {
-    observer = null;
+    _observer = null;
     super.dispose();
   }
 
   @override
   set value(T? newValue) {
-    shouldNotify = true;
+    _shouldNotify = true;
     super.value = newValue;
   }
 
   void considerNotify() {
-    if (shouldNotify && value != null) {
-      shouldNotify = false;
-      observer?.call(value!);
+    if (_shouldNotify && value != null) {
+      _shouldNotify = false;
+      _observer?.call(value!);
     }
   }
 }
